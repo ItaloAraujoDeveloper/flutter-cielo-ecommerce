@@ -1,4 +1,4 @@
-library flutter_cielo_ecommerce;
+library flutter_cielo;
 
 export 'src/cielo_ecommerce.dart';
 export 'src/Address.dart';

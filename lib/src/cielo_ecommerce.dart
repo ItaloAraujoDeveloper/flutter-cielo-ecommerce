@@ -1,10 +1,15 @@
+import 'dart:html';
+
+import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_cielo_ecommerce/src/CieloError.dart';
 import 'package:flutter_cielo_ecommerce/src/CieloException.dart';
 import 'package:flutter_cielo_ecommerce/src/CreditCard.dart';
+import 'dart:ui';
+
 import 'package:flutter_cielo_ecommerce/src/Environment.dart';
 import 'package:flutter_cielo_ecommerce/src/Merchant.dart';
 import 'package:flutter_cielo_ecommerce/src/Sale.dart';
-import 'package:dio/dio.dart';
 
 class CieloEcommerce {
   final Environment environment;
@@ -22,6 +27,7 @@ class CieloEcommerce {
     try {
       Response response =
           await dio.post("${environment.apiUrl}/1/sales/", data: sale.toJson());
+
       return Sale.fromJson(response.data);
     } on DioError catch (e) {
       _getErrorDio(e);
@@ -41,9 +47,31 @@ class CieloEcommerce {
     try {
       Response response =
           await dio.post("${environment.apiUrl}/1/card/", data: card.toJson());
+      print(response.request);
       card.cardToken = response.data["CardToken"];
-      card.cardNumber = "****"+card.cardNumber.substring(card.cardNumber.length - 4);
+      card.cardNumber =
+          "****" + card.cardNumber.substring(card.cardNumber.length - 4);
       return card;
+    } on DioError catch (e) {
+      _getErrorDio(e);
+    } catch (e) {
+      throw CieloException(
+          List<CieloError>()
+            ..add(CieloError(
+              code: 0,
+              message: e.message,
+            )),
+          "unknown");
+    }
+    return null;
+  }
+
+  Future<dynamic> consultPaymentById({@required String paymentId}) async {
+    try {
+      Response response = await dio
+          .get("${environment.apiQueryUrl}/1/sales/${paymentId.toString()}");
+
+      return response.data;
     } on DioError catch (e) {
       _getErrorDio(e);
     } catch (e) {

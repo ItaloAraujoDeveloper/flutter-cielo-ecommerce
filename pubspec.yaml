@@ -1,8 +1,8 @@
 name: flutter_cielo_ecommerce
 description: pagamento, toketização, cancelamento vendas...
 version: 0.0.1
-author:
-homepage:
+author: Ítalo Lopes de Araújo
+homepage: https://github.com/ItaloAraujoDeveloper/flutter-cielo-ecommerce
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -11,6 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^3.0.9
+  json_annotation: ^3.0.0
+  analyzer: ^0.39.4
+  yaml: ^2.2.0
+  web_socket_channel: ^1.1.0
 
 dev_dependencies:
   flutter_test:
