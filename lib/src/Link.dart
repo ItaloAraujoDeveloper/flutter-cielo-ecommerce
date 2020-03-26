@@ -1,11 +1,11 @@
-class Links {
+class Link {
   String method;
   String rel;
   String href;
 
-  Links({this.method, this.rel, this.href});
+  Link({this.method, this.rel, this.href});
 
-  Links.fromJson(Map<String, dynamic> json) {
+  Link.fromJson(Map<String, dynamic> json) {
     method = json['Method'];
     rel = json['Rel'];
     href = json['Href'];

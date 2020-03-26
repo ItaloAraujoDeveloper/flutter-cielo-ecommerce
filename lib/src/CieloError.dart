@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class CieloError {
   int code;
   String message;
@@ -7,13 +9,18 @@ class CieloError {
     this.message,
   });
 
-  factory CieloError.fromJson(Map<String, dynamic> json) {
-    return CieloError(
-        code: json['Code'] as int, message: json['Message'] as String);
-  }
+  factory CieloError.fromRawJson(String str) =>
+      CieloError.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson(CieloError instance) => <String, dynamic>{
-        'Code': instance.code,
-        'Message': instance.message,
+  String toRawJson() => json.encode(toJson());
+
+  factory CieloError.fromJson(Map<String, dynamic> json) => CieloError(
+        code: json["Code"],
+        message: json["Message"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Code": code,
+        "Message": message,
       };
 }

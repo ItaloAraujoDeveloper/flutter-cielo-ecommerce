@@ -1,6 +1,6 @@
-
 import 'dart:convert';
 
+import 'package:flutter_cielo_ecommerce/src/ChargeBack.dart';
 import 'package:flutter_cielo_ecommerce/src/CreditCard.dart';
 import 'package:flutter_cielo_ecommerce/src/Link.dart';
 
@@ -28,7 +28,7 @@ class Payment {
   String country;
   List<dynamic> extraDataCollection;
   int status;
-  List<Links> links;
+  List<Link> links;
 
   int serviceTaxAmount;
   dynamic interest;
@@ -105,7 +105,7 @@ class Payment {
       extraDataCollection: json['ExtraDataCollection'] as List,
       status: json['Status'] as int,
       links: (json['Links'] as List)
-          ?.map((e) => e == null ? null : Links.fromJson(e))
+          ?.map((e) => e == null ? null : Link.fromJson(e))
           ?.toList(),
       serviceTaxAmount: json['ServiceTaxAmount'] as int,
       interest: json['Interest'],

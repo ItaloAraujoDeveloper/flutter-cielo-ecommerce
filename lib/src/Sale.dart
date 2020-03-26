@@ -19,7 +19,7 @@ class Sale {
   String toRawJson() => json.encode(toJson());
 
   factory Sale.fromJson(Map<String, dynamic> json) => Sale(
-        merchantOrderId: json["MerchantOrderId"],
+        merchantOrderId: json["MerchantOrderId"] as String,
         customer: Customer.fromJson(json["Customer"]),
         payment: Payment.fromJson(json["Payment"]),
       );

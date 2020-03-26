@@ -1,11 +1,8 @@
-import 'dart:html';
-
-import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_cielo_ecommerce/src/CieloError.dart';
 import 'package:flutter_cielo_ecommerce/src/CieloException.dart';
+import 'package:flutter_cielo_ecommerce/src/ConsultPayments.dart';
 import 'package:flutter_cielo_ecommerce/src/CreditCard.dart';
-import 'dart:ui';
 
 import 'package:flutter_cielo_ecommerce/src/Environment.dart';
 import 'package:flutter_cielo_ecommerce/src/Merchant.dart';
@@ -28,6 +25,7 @@ class CieloEcommerce {
       Response response =
           await dio.post("${environment.apiUrl}/1/sales/", data: sale.toJson());
 
+      print(response.data);
       return Sale.fromJson(response.data);
     } on DioError catch (e) {
       _getErrorDio(e);
@@ -66,12 +64,33 @@ class CieloEcommerce {
     return null;
   }
 
-  Future<dynamic> consultPaymentById({@required String paymentId}) async {
+  Future<Sale> consultPaymentById({String paymentId}) async {
     try {
-      Response response = await dio
-          .get("${environment.apiQueryUrl}/1/sales/${paymentId.toString()}");
+      Response response =
+          await dio.get("${environment.apiQueryUrl}/1/sales/$paymentId");
 
-      return response.data;
+      return Sale.fromJson(response.data);
+    } on DioError catch (e) {
+      _getErrorDio(e);
+    } catch (e) {
+      throw CieloException(
+          List<CieloError>()
+            ..add(CieloError(
+              code: 0,
+              message: e.message,
+            )),
+          "unknown");
+    }
+    return null;
+  }
+
+  Future<ConsultPayments> consultMerchantOrderId(
+      {String merchantOrderId}) async {
+    try {
+      Response response = await dio.get(
+          "${environment.apiQueryUrl}/1/sales?merchantOrderId=$merchantOrderId");
+
+      return ConsultPayments.fromJson(response.data);
     } on DioError catch (e) {
       _getErrorDio(e);
     } catch (e) {
