@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_cielo_ecommerce/src/Bin.dart';
 import 'package:flutter_cielo_ecommerce/src/CieloError.dart';
 import 'package:flutter_cielo_ecommerce/src/CieloException.dart';
 import 'package:flutter_cielo_ecommerce/src/ConsultPayments.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_cielo_ecommerce/src/CreditCard.dart';
 import 'package:flutter_cielo_ecommerce/src/Environment.dart';
 import 'package:flutter_cielo_ecommerce/src/Merchant.dart';
 import 'package:flutter_cielo_ecommerce/src/Sale.dart';
+
+import 'Cancellation.dart';
 
 class CieloEcommerce {
   final Environment environment;
@@ -25,7 +28,7 @@ class CieloEcommerce {
       Response response =
           await dio.post("${environment.apiUrl}/1/sales/", data: sale.toJson());
 
-      print(response.data);
+      //print(response.data);
       return Sale.fromJson(response.data);
     } on DioError catch (e) {
       _getErrorDio(e);
@@ -91,6 +94,48 @@ class CieloEcommerce {
           "${environment.apiQueryUrl}/1/sales?merchantOrderId=$merchantOrderId");
 
       return ConsultPayments.fromJson(response.data);
+    } on DioError catch (e) {
+      _getErrorDio(e);
+    } catch (e) {
+      throw CieloException(
+          List<CieloError>()
+            ..add(CieloError(
+              code: 0,
+              message: e.message,
+            )),
+          "unknown");
+    }
+    return null;
+  }
+
+  Future<Bin> consultBin({String bin}) async {
+    try {
+      Response response =
+          await dio.get("${environment.apiQueryUrl}/1/cardBin/$bin");
+
+      return Bin.fromJson(response.data);
+    } on DioError catch (e) {
+      _getErrorDio(e);
+    } catch (e) {
+      throw CieloException(
+          List<CieloError>()
+            ..add(CieloError(
+              code: 0,
+              message: e.message,
+            )),
+          "unknown");
+    }
+    return null;
+  }
+
+  Future<Cancellation> cancellationPaymentId(
+      {String paymentId, int amount}) async {
+    try {
+      Response response = await dio.put(
+          "${environment.apiUrl}/1/sales/$paymentId/void?amount=${amount.toString()}");
+      print(response.data);
+      print('dddd');
+      return Cancellation.fromJson(response.data);
     } on DioError catch (e) {
       _getErrorDio(e);
     } catch (e) {

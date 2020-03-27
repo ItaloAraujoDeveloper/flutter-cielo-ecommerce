@@ -1,4 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter_cielo_ecommerce/flutter_cielo.dart';
+import 'package:flutter_cielo_ecommerce/src/Browser.dart';
+import 'package:flutter_cielo_ecommerce/src/FraudAnalysis.dart';
+import 'package:flutter_cielo_ecommerce/src/Shipping.dart';
+import 'package:flutter_cielo_ecommerce/src/Travel.dart';
 
 class Constants {
   //cielo API
@@ -17,18 +23,28 @@ void main() async {
       merchantKey: Constants.MerchantKey,
     ),
   );
-/*
+
+  //saleExample(cielo: cielo);
+
   try {
-    var result = await cielo.consultMerchantOrderId(merchantOrderId: '123');
-    print(result.payments);
+    var result = await cielo.cancellationPaymentId(
+        paymentId: 'd598f993-02f3-4ebe-9543-26bd4cd78cb8', amount: 100);
+    print(result.providerReturnCode);
+    print(result.providerReturnMessage);
+    print(result.reasonCode);
+    print(result.reasonMessage);
+    print(result.returnCode);
+    print(result.returnMessage);
+    print(result.status);
   } on CieloException catch (e) {
     print(e.message);
     print(e.errors[0].message);
     print(e.errors[0].code);
-  }*/
+  }
 
   //cardToketizadoExample(cielo: cielo);
-  saleExample(cielo: cielo);
+  //saleExample(cielo: cielo);
+  /**/
 }
 
 void consultMerchantOrderIdExample({CieloEcommerce cielo}) async {
@@ -55,7 +71,7 @@ void consultPaymentByIdExample({CieloEcommerce cielo}) async {
 }
 
 //function
-Future<CreditCard> cardToketizadoExample({CieloEcommerce cielo}) async {
+void cardToketizadoExample({CieloEcommerce cielo}) async {
   CreditCard cart = CreditCard(
     customerName: "italo lopes de araujo",
     cardNumber: "4001786606443146",
@@ -90,13 +106,60 @@ void saleExample({CieloEcommerce cielo}) async {
         creditCard: CreditCard.token(
           cardToken: "18829a9f-4429-4be5-b734-7162bbbbc875",
           securityCode: "070",
-          brand: "Visa",
+          brand: "VISA",
+        ),
+        fraudAnalysis: FraudAnalysis(
+          provider: 'cybersource',
+          sequence: 'AuthorizeFirst',
+          sequenceCriteria: 'OnSuccess',
+          totalOrderAmount: 100,
+          shipping: Shipping(
+            addressee: 'Italo Lopes de Araujo',
+            method: 'SameDay',
+            phone: '5527998904655',
+          ),
         ),
       ));
 
   try {
     var response = await cielo.createSale(sale);
     print(response.toRawJson());
+    print(response.payment.paymentId);
+  } on CieloException catch (e) {
+    print(e.message);
+    print(e.errors[0].message);
+    print(e.errors[0].code);
+  }
+}
+
+void cancellationPaymentIdEXAMPLE({CieloEcommerce cielo}) async {
+  try {
+    var result = await cielo.cancellationPaymentId(
+        paymentId: 'd598f993-02f3-4ebe-9543-26bd4cd78cb8', amount: 100);
+    print(result.providerReturnCode);
+    print(result.providerReturnMessage);
+    print(result.reasonCode);
+    print(result.reasonMessage);
+    print(result.returnCode);
+    print(result.returnMessage);
+    print(result.status);
+  } on CieloException catch (e) {
+    print(e.message);
+    print(e.errors[0].message);
+    print(e.errors[0].code);
+  }
+}
+
+void consultBinExample({CieloEcommerce cielo}) async {
+  try {
+    var result = await cielo.consultBin(bin: '420020');
+    print(result.provider);
+    print(result.cardType);
+    print(result.corporateCard);
+    print(result.foreignCard);
+    print(result.issuer);
+    print(result.issuerCode);
+    print(result.status);
   } on CieloException catch (e) {
     print(e.message);
     print(e.errors[0].message);
