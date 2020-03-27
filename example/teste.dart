@@ -1,10 +1,8 @@
 import 'dart:ffi';
 
-import 'package:flutter_cielo_ecommerce/flutter_cielo.dart';
-import 'package:flutter_cielo_ecommerce/src/Browser.dart';
+import 'package:flutter_cielo_ecommerce/flutter_cielo_ecommerce.dart';
 import 'package:flutter_cielo_ecommerce/src/FraudAnalysis.dart';
 import 'package:flutter_cielo_ecommerce/src/Shipping.dart';
-import 'package:flutter_cielo_ecommerce/src/Travel.dart';
 
 class Constants {
   //cielo API

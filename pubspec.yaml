@@ -1,7 +1,6 @@
 name: flutter_cielo_ecommerce
 description: pagamento, toketização, cancelamento vendas...
 version: 0.0.1
-author: Italo Lopes de Araujo
 homepage: https://github.com/ItaloAraujoDeveloper/flutter-cielo-ecommerce
 
 environment:
